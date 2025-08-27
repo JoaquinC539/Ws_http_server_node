@@ -5,6 +5,8 @@ import Websocket from 'ws';
 import http from 'http';
 import { Routes } from './Routes';
 import { WssActions } from './WssActions';
+import path from 'path';
+import { CorsConfig } from './CorsConfig';
 const PORT=4682;
 const app: Express = express();
 
@@ -16,19 +18,15 @@ const wsa=new WssActions(wss);
 
 wsa.setWssEvents();
 
-
-app.use(cors());
+app.use(cors(CorsConfig.getCorsOptions()));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname,"..","/browser/static") ));
 const routes = new Routes();
 app.use("/api",routes.getRoutes())
-
-
-
-
-// app.listen(PORT,()=>{
-//     console.log(`Listening on port ${PORT}`);
-// });
+app.use("/",(req,res)=>{
+    res.setHeader("Content-Type","text/html").sendFile(path.join(__dirname,"..","browser","static","html","index.html"))
+})
 
 export function getPort():number{
     return PORT;

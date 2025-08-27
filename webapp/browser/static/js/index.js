@@ -1,5 +1,6 @@
 var _a;
 console.log("Hello world");
+console.log(window.location.href);
 const locationHost = "localhost:4682";
 const wsUrl = `ws://${locationHost}`;
 const apiUrl = `http://${locationHost}/api`;
